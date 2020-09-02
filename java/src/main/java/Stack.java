@@ -1,3 +1,7 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.Iterator;
+
 /*
     Author: Andreas Hammarstrand
     Written: 2020/08/26
@@ -9,7 +13,7 @@
         starting items. Items are added to the stack through `push(T item)`
         and removed from the stack through `pop(item)`.
  */
-public class Stack<T>
+public class Stack<T> implements Iterable<T>
 {
     public Stack()
     {
@@ -92,31 +96,30 @@ public class Stack<T>
     // returns a string representation of the object instance.
     public String toString()
     {
+        // using a standard case to return a standard value
+        if (isEmpty())
+        {
+            return "[]";
+        }
+
         StringBuilder sb = new StringBuilder();
 
+        // printed lists starts and end with '[' and ']' respectively
         sb.append('[');
-        
-        // here we avoid appending the string version of the last element
-        // to make the string neater. otherwise it would result in:
-        // "[a, b, c, ]"
-        // by moving the printing of the last element to after the array
-        // we will get the neat version:
-        // "[a, b, c]"
+
+        // all values are appended to sb with a joint comma for each successive pair
+        // of values, last value left out of loop to avoid an empty array
+        // [.., x, y, z, ] -> [.., x, y, z]
         for (int i = 0; i < size() - 1; i++)
         {
-            String numberString = values[i].toString();
             sb
-                    .append('\'')
-                    .append(numberString)
-                    .append('\'')
+                    .append(values[i].toString())
                     .append(", ");
         }
 
         // last item is appended
         sb
-                .append('\'')
-                .append(values[size() - 1].toString())
-                .append('\'');
+                .append(values[size() - 1].toString());
         
         sb.append(']');
 
@@ -154,7 +157,7 @@ public class Stack<T>
         s.push('l');
         s.push('o');
 
-        System.out.println("Expecting: ['h', 'e', 'l', 'l', 'o']   Got: " 
+        System.out.println("Expecting: [h, e, l, l, o]   Got: "
             + s.toString());
 
         while (!s.isEmpty())
@@ -184,6 +187,40 @@ public class Stack<T>
         while (!s.isEmpty())
         {
             System.out.print(s.pop());
+        }
+    }
+
+    // returns an iterator that spans over the stack.
+    public Iterator<T> iterator()
+    {
+        return new StackIterator();
+    }
+
+    private class StackIterator implements Iterator<T>
+    {
+        int stackPointer;
+
+        public StackIterator()
+        {
+            stackPointer = -1;
+        }
+
+        // returns a bool specifying if the iterator has following element.
+        public boolean hasNext()
+        {
+            return stackPointer < size();
+        }
+
+        // moves the iterator to the next value and returns it.
+        public T next()
+        {
+            return values[++stackPointer];
+        }
+
+        // warnings are given when `remove` is not overridden, throwing UnsupportedOperation exception instead.
+        public void remove()
+        {
+            throw new UnsupportedOperationException();
         }
     }
 }
