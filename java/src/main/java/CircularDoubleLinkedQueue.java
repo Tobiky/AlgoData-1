@@ -1,16 +1,31 @@
 import java.util.Iterator;
 
-public class FIFOQueue<T> implements Iterable<T>
+public class CircularDoubleLinkedQueue<T> implements Iterable<T>
 {
-    private class Node
+    protected class Node
     {
         public T value;
         public Node next;
         public Node previous;
     }
 
-    Node first, last;
-    int size;
+    private Node first, last;
+    private int size;
+
+    protected Node first()
+    {
+        return first;
+    }
+
+    protected Node last()
+    {
+        return last;
+    }
+
+    public CircularDoubleLinkedQueue()
+    {
+        size = 0;
+    }
 
     // puts the item at the end of the queue.
     public void enqueue(T item)
@@ -71,32 +86,37 @@ public class FIFOQueue<T> implements Iterable<T>
         return value;
     }
 
+    // returns amount of elements in the queue.
     public int size()
     {
         return size;
     }
 
+    // returns true if the queue is empty, otherwise false.
     public boolean isEmpty()
     {
         return size == 0;
     }
 
+    // returns a string representation of the queue instance.
+    @Override
     public String toString()
     {
-        Node n = first;
-
         // using a standard case to return a standard value
         if (isEmpty())
         {
             return "[]";
         }
 
-        StringBuilder sb = new StringBuilder();
+        Node n = first;
 
         // printed lists starts and end with '[' and ']' respectively
+        StringBuilder sb = new StringBuilder();
         sb.append('[');
 
-        // loop through the nodes and append all of them
+        // all values are appended to sb with a joint comma for each successive pair
+        // of values, last value left out of loop to avoid an empty array
+        // [.., x, y, z, ] -> [.., x, y, z]
         while (n != last){
             sb
                     .append(n.value.toString())
@@ -104,11 +124,10 @@ public class FIFOQueue<T> implements Iterable<T>
             n = first.next;
         }
 
-        // append last node
+        // append last element
         sb.append(last.toString());
 
         sb.append(']');
-
         return sb.toString();
     }
 
@@ -151,6 +170,7 @@ public class FIFOQueue<T> implements Iterable<T>
         }
     }
 
+    // test method
     public static void main(String[] args)
     {
         // these tests make sure that each member of the type works

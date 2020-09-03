@@ -1,5 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -95,6 +93,7 @@ public class Stack<T> implements Iterable<T>
     }
 
     // returns a string representation of the object instance.
+    @Override
     public String toString()
     {
         // using a standard case to return a standard value
@@ -103,9 +102,8 @@ public class Stack<T> implements Iterable<T>
             return "[]";
         }
 
-        StringBuilder sb = new StringBuilder();
-
         // printed lists starts and end with '[' and ']' respectively
+        StringBuilder sb = new StringBuilder();
         sb.append('[');
 
         // all values are appended to sb with a joint comma for each successive pair
@@ -118,12 +116,11 @@ public class Stack<T> implements Iterable<T>
                     .append(", ");
         }
 
-        // last item is appended
+        // append last element
         sb
                 .append(values[size() - 1].toString());
         
         sb.append(']');
-
         return sb.toString();
     }
 
@@ -236,9 +233,6 @@ public class Stack<T> implements Iterable<T>
         // here the test focuses on regular usage of the type,
         // rather than surface level method testing like above
         String value = "this is a test value";
-        String expected = (new StringBuilder(value))
-                            .reverse()
-                            .toString();
         
         for (char character : value.toCharArray())
         {
@@ -274,7 +268,7 @@ public class Stack<T> implements Iterable<T>
             System.out.println(s.toString());
         }
 
-        for (char character : s)
+        while (!s.isEmpty())
         {
             s.pop();
             System.out.println(s.toString());
