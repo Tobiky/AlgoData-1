@@ -1,6 +1,7 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Iterator;
+import java.util.Scanner;
 
 /*
     Author: Andreas Hammarstrand
@@ -126,6 +127,40 @@ public class Stack<T> implements Iterable<T>
         return sb.toString();
     }
 
+    // returns an iterator that spans over the stack.
+    public Iterator<T> iterator()
+    {
+        return new StackIterator();
+    }
+
+    private class StackIterator implements Iterator<T>
+    {
+        int stackPointer;
+
+        public StackIterator()
+        {
+            stackPointer = size();
+        }
+
+        // returns a bool specifying if the iterator has following element.
+        public boolean hasNext()
+        {
+            return stackPointer > 0;
+        }
+
+        // moves the iterator to the next value and returns it.
+        public T next()
+        {
+            return values[--stackPointer];
+        }
+
+        // warnings are given when `remove` is not overridden, throwing UnsupportedOperation exception instead.
+        public void remove()
+        {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     // test method
     public static void main(String[] args)
     {
@@ -135,31 +170,63 @@ public class Stack<T> implements Iterable<T>
         // for a more rigorous test, see case test below.
 
         Stack<Character> s = new Stack<Character>();
-        
-        System.out.println("Expecting: 0   Got: " 
-            + s.size());
-        
+
+        boolean assertion;
+
+        // check that `size` and `isEmpty` are correct at the initial state of a `Stack`
+        int initial_size_result = s.size();
+        assertion = s.size() == 0;
+        boolean initial_isEmpty_result = s.isEmpty();
+
+        assert assertion : initial_size_result;
+        assert initial_isEmpty_result;
+
+
+        // after 1 push to the stack the `size` should be 1 and `isEmpty` should be false
         s.push('a');
-        
-        System.out.println("Expecting: 1   Got: " 
-            + s.size());
-        
-        char c = s.pop();
 
-        System.out.println("Expecting: 0   Got: " 
-            + s.size());
-        System.out.println("Expecting: a   Got: " 
-            + c);
+        int push_size_result = s.size();
+        assertion = s.size() == 1;
+        boolean push_isEmpty_result = s.isEmpty();
 
+        assert assertion : push_size_result;
+        assert !push_isEmpty_result;
+
+
+        // popping a value from the stack should reduce the size by one (in this case to 0)
+        // after popping the last value, `isEmpty` should return `true` as well
+        //
+        // as a consequence of popping one value, a resizing to a smaller array should happen
+        // if this is the case, valid functionality at later uses of this stack proves
+        // that resizing to smaller arrays is working.
+        char popped_result = s.pop();
+        int popped_size_result = s.size();
+        boolean popped_isEmpty_result = s.isEmpty();
+
+        assertion = popped_size_result == 0;
+        assert assertion : popped_size_result;
+
+        assertion = popped_result == 'a';
+        assert assertion : popped_result;
+
+        assert popped_isEmpty_result;
+
+
+        // the `toString` function should return the elements starting from the
+        // bottom of the stack and ending at the top of the stack, in the
+        // specified format.
+        // this will also test resizing to bigger arrays.
         s.push('h');
         s.push('e');
         s.push('l');
         s.push('l');
         s.push('o');
 
-        System.out.println("Expecting: [h, e, l, l, o]   Got: "
-            + s.toString());
+        String toString_result = s.toString();
+        assertion = toString_result.equals("[h, e, l, l, o]");
+        assert assertion : toString_result;
 
+        // to reset the stack
         while (!s.isEmpty())
         {
             s.pop();
@@ -184,43 +251,33 @@ public class Stack<T> implements Iterable<T>
                             s.toString());
 
         System.out.println("Iterative output:");
+        for (char character : s)
+        {
+            System.out.print(character);
+        }
+        System.out.print('\n');
+
+        // clearing stack
         while (!s.isEmpty())
         {
-            System.out.print(s.pop());
-        }
-    }
-
-    // returns an iterator that spans over the stack.
-    public Iterator<T> iterator()
-    {
-        return new StackIterator();
-    }
-
-    private class StackIterator implements Iterator<T>
-    {
-        int stackPointer;
-
-        public StackIterator()
-        {
-            stackPointer = -1;
+            s.pop();
         }
 
-        // returns a bool specifying if the iterator has following element.
-        public boolean hasNext()
+        System.out.println("Testing for input:");
+        Scanner input = new Scanner(System.in);
+        String inputString = input.nextLine();
+
+        System.out.println(s.toString());
+        for (char character : inputString.toCharArray())
         {
-            return stackPointer < size();
+            s.push(character);
+            System.out.println(s.toString());
         }
 
-        // moves the iterator to the next value and returns it.
-        public T next()
+        for (char character : s)
         {
-            return values[++stackPointer];
-        }
-
-        // warnings are given when `remove` is not overridden, throwing UnsupportedOperation exception instead.
-        public void remove()
-        {
-            throw new UnsupportedOperationException();
+            s.pop();
+            System.out.println(s.toString());
         }
     }
 }

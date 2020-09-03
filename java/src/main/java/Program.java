@@ -1,6 +1,21 @@
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Program {
+    private static void recursive() throws IOException
+    {
+        // input from user
+        char c = (char)System.in.read();
+
+        // if input was not new line, take in another input recursively
+        if (c != '\n') {
+            recursive();
+        }
+
+        // output raw input to stdout
+        System.out.print(c);
+    }
+
     public static void main(String[] args) throws IOException
     {
         // Take input from user
@@ -22,5 +37,6 @@ public class Program {
         {
             System.out.print(characters.pop());
         }
+        System.out.print('\n');
     }
 }

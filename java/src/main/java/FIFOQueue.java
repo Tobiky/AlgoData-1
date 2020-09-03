@@ -31,7 +31,7 @@ public class FIFOQueue<T> implements Iterable<T>
         // update node n links
         n.next = first;
         n.previous = last;
-    
+
         // update node last links
         last.next = n;
         last = n;
@@ -131,7 +131,7 @@ public class FIFOQueue<T> implements Iterable<T>
         // returns a bool specifying if the iterator has following element.
         public boolean hasNext()
         {
-            return current == last;
+            return current != last;
         }
 
         // moves the iterator to the next value and returns it.
