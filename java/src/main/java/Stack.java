@@ -168,26 +168,20 @@ public class Stack<T> implements Iterable<T>
 
         Stack<Character> s = new Stack<Character>();
 
-        boolean assertion;
-
         // check that `size` and `isEmpty` are correct at the initial state of a `Stack`
         int initial_size_result = s.size();
-        assertion = s.size() == 0;
-        boolean initial_isEmpty_result = s.isEmpty();
 
-        assert assertion : initial_size_result;
-        assert initial_isEmpty_result;
+        assert initial_size_result == 0 : initial_size_result;
+        assert s.isEmpty();
 
 
         // after 1 push to the stack the `size` should be 1 and `isEmpty` should be false
         s.push('a');
 
         int push_size_result = s.size();
-        assertion = s.size() == 1;
-        boolean push_isEmpty_result = s.isEmpty();
 
-        assert assertion : push_size_result;
-        assert !push_isEmpty_result;
+        assert push_size_result == 1 : push_size_result;
+        assert !s.isEmpty();
 
 
         // popping a value from the stack should reduce the size by one (in this case to 0)
@@ -200,12 +194,8 @@ public class Stack<T> implements Iterable<T>
         int popped_size_result = s.size();
         boolean popped_isEmpty_result = s.isEmpty();
 
-        assertion = popped_size_result == 0;
-        assert assertion : popped_size_result;
-
-        assertion = popped_result == 'a';
-        assert assertion : popped_result;
-
+        assert popped_size_result == 0 : popped_size_result;
+        assert popped_result == 'a' : popped_result;
         assert popped_isEmpty_result;
 
 
@@ -220,8 +210,7 @@ public class Stack<T> implements Iterable<T>
         s.push('o');
 
         String toString_result = s.toString();
-        assertion = toString_result.equals("[h, e, l, l, o]");
-        assert assertion : toString_result;
+        assert toString_result.equals("[h, e, l, l, o]") : toString_result;
 
         // to reset the stack
         while (!s.isEmpty())

@@ -7,6 +7,12 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
         public T value;
         public Node next;
         public Node previous;
+
+        @Override
+        public String toString()
+        {
+            return value.toString();
+        }
     }
 
     private Node first, last;
@@ -40,6 +46,7 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
         if (first == null)
         {
             n.next = n.previous = n;
+            first = last = n;
             return;
         }
 
@@ -108,7 +115,7 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
             return "[]";
         }
 
-        Node n = first;
+        Node current = first;
 
         // printed lists starts and end with '[' and ']' respectively
         StringBuilder sb = new StringBuilder();
@@ -117,15 +124,15 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
         // all values are appended to sb with a joint comma for each successive pair
         // of values, last value left out of loop to avoid an empty array
         // [.., x, y, z, ] -> [.., x, y, z]
-        while (n != last){
+        while (current != last){
             sb
-                    .append(n.value.toString())
+                    .append(current.value.toString())
                     .append(", ");
-            n = first.next;
+            current = current.next;
         }
 
         // append last element
-        sb.append(last.toString());
+        sb.append(last.value.toString());
 
         sb.append(']');
         return sb.toString();
@@ -163,7 +170,8 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
             return  value;
         }
 
-        // warnings are given when `remove` is not overridden, throwing UnsupportedOperation exception instead.
+        // warnings are given when `remove` is not overridden,
+        // throwing UnsupportedOperation exception instead.
         public void remove()
         {
             throw new UnsupportedOperationException();
@@ -173,12 +181,69 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
     // test method
     public static void main(String[] args)
     {
+        CircularDoubleLinkedQueue<Character> q = new CircularDoubleLinkedQueue<Character>();
+
         // these tests make sure that each member of the type works
         // on a surface-level.
         // for a more rigorous test, see case test below.
 
+        // check that `size` and `isEmpty` are correct at the initial
+        // state of a `CircularDoubleLinkedQueue`
+        int initial_size_result = q.size();
+        String initial_toString = q.toString();
+
+        assert q.isEmpty();
+        assert initial_size_result == 0 : initial_size_result;
+        assert initial_toString.equals("[]") : initial_toString;
+
+        // after 1 push to the stack the `size` should be 1 and `isEmpty`
+        // should be false
+        q.enqueue('a');
+
+        int enqueue_size_result = q.size();
+        String enqueue_toString = q.toString();
+
+        assert !q.isEmpty();
+        assert enqueue_size_result == 1 : enqueue_size_result;
+        assert enqueue_toString.equals("[a]") : enqueue_toString;
+
+        // dequeueing a value from the stack should reduce the size by one
+        // (in this case to 0) after popping the last value, `isEmpty`
+        // should return `true` as well
+        //
+        // as a consequence of dequeueing one value, the queue should reset
+        // back to its initial state
+        char dequeue_result = q.dequeue();
+        int dequeue_size_result = q.size();
+        String dequeue_toString = q.toString();
+
+        assert q.isEmpty();
+        assert dequeue_result == 'a' : dequeue_result;
+        assert dequeue_size_result == 0 : dequeue_size_result;
+        assert dequeue_toString.equals("[]") : dequeue_toString;
+
+        // considering that adding the first value differs
+        // slightly from adding second and later, we test its
+        // functionality here
+        q.enqueue('h');
+        q.enqueue('e');
+        q.enqueue('l');
+        q.enqueue('l');
+        q.enqueue('o');
+
+        String multiple_values_toString = q.toString();
+
+        assert multiple_values_toString.equals("[h, e, l, l, o]") : multiple_values_toString;
+
+        // reset q; the queue
+        while (!q.isEmpty())
+        {
+            q.dequeue();
+        }
+
         // case test
         // here the test focuses on regular usage of the type,
         // rather than surface level method testing like above
+
     }
 }
