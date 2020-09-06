@@ -1,3 +1,17 @@
+/*
+    Author: Andreas Hammarstrand
+    Written: 2020/09/01
+    Updated: 2020/09/06
+    Purpose:
+        GeneralizedQueue<T> extends the functionality of
+        CircularDoubleLinkedQueue<T> by allowing the user
+        to remove values at certain indices.
+    Usage:
+        See CircularDoubleLinkedQueue<T> for base functionality.
+        `removeAt(int index)` allows the user to remove a value
+        at the specified index.
+ */
+
 public class GeneralizedQueue<T> extends CircularDoubleLinkedQueue<T>
 {
     public GeneralizedQueue()
@@ -8,24 +22,32 @@ public class GeneralizedQueue<T> extends CircularDoubleLinkedQueue<T>
     // goes from the back to front to remove the element
     private T removeFromBack(int index)
     {
-        int count = size() - index;
+        // count is the amount of nodes we need to traverse to get to
+        // wanted node.
+        int count = super.size() - index;
 
-        Node current = last();
+        Node current = super.last();
 
-        // because we want the node before the searched node we look for the node
-        // at `index` - 1, e.i. we will decrement until we hit the index before
-        // the starting index value (1).
-        while (count > 1)
+        // traverse the nodes
+        while (count > 0)
         {
             current = current.previous;
             count--;
         }
 
-        T value = current.previous.value;
+        T value = current.value;
 
         // update links to remove element at `index` from circulation and reconnect the circle
-        current.previous = current.previous.previous;
-        current.previous.next = current;
+        Node back = current.previous;
+        Node front = current.next;
+
+        back.next = front;
+        front.previous = back;
+
+        if (index == size())
+        {
+            setLast(back);
+        }
 
         return value;
     }
@@ -33,19 +55,13 @@ public class GeneralizedQueue<T> extends CircularDoubleLinkedQueue<T>
     // goes from the front to back to remove the element
     private T removeFromFront(int index)
     {
-        // using a standard case to use a native function
-        if (index == 1)
-        {
-            return super.dequeue();
-        }
+        Node current = super.first();
 
-        Node current = first();
-
-        // because we want the node before the searched node we look for the node
-        // at `index` - 1, e.i. we will decrement until we hit the index before
-        // the starting index value (1). however, that case has already been
-        // handled above.
-        while (index > 2)
+        // as index also serves the amount of nodes that need traversal,
+        // index will be use to keep track of the traversed nodes.
+        // however, the case of first node is already being taken cared of
+        // so one node is skipped, therefore `index > 1`.
+        while (index > 1)
         {
             current = current.next;
             index--;
@@ -54,8 +70,11 @@ public class GeneralizedQueue<T> extends CircularDoubleLinkedQueue<T>
         T value = current.next.value;
 
         // update links to remove element at `index` from circulation and reconnect the circle
-        current.next = current.next.next;
-        current.next.previous = current;
+        Node back = current.previous;
+        Node front = current.next;
+
+        back.next = front;
+        front.previous = back;
 
         return value;
     }
@@ -65,13 +84,104 @@ public class GeneralizedQueue<T> extends CircularDoubleLinkedQueue<T>
     public T removeAt(int index)
     {
         // we cannot remove or return an element that is not part of the list
-        if (index < 1 || index > size())
+        if (index < 1 || index > super.size())
         {
             throw new IndexOutOfBoundsException();
         }
 
-        return (index < size() / 2)
-                    ? removeFromFront(index)
-                    : removeFromBack(index);
+        // using a standard case to use a native function
+        if (index == 1)
+        {
+            return super.dequeue();
+        }
+
+        // searches from back to front if the index is in the end half,
+        // otherwise it search front to back
+        T result =  (index <= super.size() / 2)
+                        ? removeFromFront(index)
+                        : removeFromBack(index);
+
+        // decrement the size
+        // because this is an extended class, it does not have direct access
+        // to the size field.
+        super.setSize(super.size() - 1);
+        return result;
+    }
+
+    // test method
+    // because `GeneralizedQueue` extends `CircularDoubleLinkedQueue` we only need to test the added methods
+    public static void main(String[] args)
+    {
+        GeneralizedQueue<Character> q = new GeneralizedQueue<Character>();
+        // these tests make sure that each member of the type works
+        // on a surface-level.
+        // for a more rigorous test, see case test below.
+
+        // testing removal of one value
+        q.enqueue('a');
+        char removeAt_result = q.removeAt(1);
+
+        assert removeAt_result == 'a' : removeAt_result;
+
+
+        // testing removal of middle value
+        q.enqueue('a');
+        q.enqueue('b');
+        q.enqueue('c');
+
+        char removeAt_middle_result = q.removeAt(2);
+
+        assert removeAt_middle_result == 'b' : removeAt_middle_result;
+
+        // reset q; the queue
+        while (!q.isEmpty())
+        {
+            q.dequeue();
+        }
+
+
+        // testing removal of end value
+        q.enqueue('a');
+        q.enqueue('b');
+        q.enqueue('c');
+        q.enqueue('d');
+
+        char removeAt_end_result = q.removeAt(4);
+
+        assert removeAt_end_result == 'd' : removeAt_end_result;
+
+        // reset q; the queue
+        while (!q.isEmpty())
+        {
+            q.dequeue();
+        }
+
+        // case test
+        // here the test focuses on regular usage of the type,
+        // rather than surface level method testing like above
+
+        // case:
+        // misspellt word was inputted, removing the letters that are wrong
+        String testValue = "Hellloip";
+        for (char c : testValue.toCharArray())
+        {
+            q.enqueue(c);
+            System.out.println(q);
+        }
+
+        // remove the extra 'l'
+        char extra_l = q.removeAt(5);
+        assert extra_l == 'l' : extra_l;
+        System.out.println(q);
+
+        // remove 'i'
+        char i = q.removeAt(6);
+        assert i == 'i' : i;
+        System.out.println(q);
+
+        // remove 'p'
+        char p = q.removeAt(6);
+        assert p == 'p' : p;
+        System.out.println(q);
     }
 }

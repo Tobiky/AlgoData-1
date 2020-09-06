@@ -1,3 +1,11 @@
+/*
+    Author: Andreas Hammarstrand
+    Written:
+    Updated:
+    Purpose:
+    Usage:
+ */
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -18,25 +26,25 @@ public class Program {
 
     public static void main(String[] args) throws IOException
     {
-        // Take input from user
-        Stack<Character>  characters = new Stack<Character>();
-        System.out.println("Input:");
-        int in = System.in.read();
+        System.out.println("Recursive:");
+        recursive();
 
-        while (in > -1 && (char)in != '\n')
+        System.out.println("Iterative:");
+        Stack<Character>  characters = new Stack<Character>();
+
+        Scanner in = new Scanner(System.in);
+        String input = in.nextLine();
+
+        // push all of input to the stack
+        for (char c : input.toCharArray())
         {
-            characters.push((char)in);
-            in = System.in.read();
+            characters.push(c);
         }
 
-        // Print out input in different formats
-        System.out.println("\nOutput:");
-        System.out.println(characters.toString());
-
-        while (!characters.isEmpty())
+        // write out all of the stack through popping
+        while (characters.isEmpty())
         {
             System.out.print(characters.pop());
         }
-        System.out.print('\n');
     }
 }

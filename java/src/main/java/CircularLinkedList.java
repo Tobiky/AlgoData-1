@@ -1,4 +1,19 @@
+/*
+    Author: Andreas Hammarstrand
+    Written: 2020/09/03
+    Updated: 2020/09/06
+    Purpose:
+        `CircularLinkedList<T>` is an implementation of a list, based on linked
+         nodes and is linked circularly.
+    Usage:
+        Create an instance with `new CircularLinkedList<T>()` where `T`
+        is wanted type. To add values, use either `void addLast(T item)`
+        or `void addFirst(T item)`, to remove values use either
+        `T removeLast()` or `T removeFirst()`.
+ */
+
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class CircularLinkedList<T> implements Iterable<T>
 {
@@ -6,6 +21,12 @@ public class CircularLinkedList<T> implements Iterable<T>
     {
         public T value;
         public Node next;
+
+        @Override
+        public String toString()
+        {
+            return value.toString();
+        }
     }
 
     private Node first, last;
@@ -114,7 +135,10 @@ public class CircularLinkedList<T> implements Iterable<T>
         }
 
         // connect the last one with the next item on the list
+        // and update the first to be the next item on the list.
         last.next = first.next;
+        first = first.next;
+
         return value;
     }
 
@@ -144,7 +168,9 @@ public class CircularLinkedList<T> implements Iterable<T>
         }
 
         // connect the last one with the next item on the list
+        // and update `last` to be the earlier node.
         current.next = first;
+        last = current;
 
         return value;
     }
@@ -171,8 +197,10 @@ public class CircularLinkedList<T> implements Iterable<T>
         while (current != last)
         {
             sb
-                    .append(current.value.toString())
+                    .append(current.toString())
                     .append(", ");
+
+            current = current.next;
         }
 
         // append last element
@@ -184,6 +212,130 @@ public class CircularLinkedList<T> implements Iterable<T>
 
     public static void main(String[] args)
     {
+        CircularLinkedList<Character> l = new CircularLinkedList<Character>();
+        // these tests make sure that each member of the type works
+        // on a surface-level.
+        // for a more rigorous test, see case test below.
+        int initial_size_result = l.size();
+        String initial_toString = l.toString();
 
+        assert l.isEmpty();
+        assert initial_size_result == 0 : initial_size_result;
+        assert initial_toString.equals("[]") : initial_toString;
+
+        // here `addFirst` and `removeFirst` are tested
+        // after 1 push to the list the `size` should be 1 and `isEmpty`
+        // should be false
+        l.addFirst('a');
+
+        int addFirst_size_result = l.size();
+        String addFirst_toString = l.toString();
+
+        assert !l.isEmpty();
+        assert addFirst_size_result == 1 : addFirst_size_result;
+        assert addFirst_toString.equals("[a]") : addFirst_toString;
+
+        // dequeueing a value from the stack should reduce the size by one
+        // (in this case to 0) after popping the last value, `isEmpty`
+        // should return `true` as well
+        //
+        // as a consequence of dequeueing one value, the queue should reset
+        // back to its initial state
+        char removeFirst_result = l.removeFirst();
+        int removeFirst_size_result = l.size();
+        String removeFirst_toString = l.toString();
+
+        assert l.isEmpty();
+        assert removeFirst_result == 'a' : removeFirst_result;
+        assert removeFirst_size_result == 0 : removeFirst_size_result;
+        assert removeFirst_toString.equals("[]") : removeFirst_toString;
+
+        // here `addLast` and `removeLast` are tested.
+        // because `addLast` and `addFirst` use the same underlying method
+        // we only test if `addLast` puts the items in the correct order,
+        // rather than its entire functionality.
+
+        // considering that adding the first value differs
+        // slightly from adding second and later, we test its
+        // functionality here
+        l.addLast('h');
+        l.addLast('e');
+        l.addLast('l');
+        l.addLast('l');
+        l.addLast('o');
+
+        String multiple_values_toString = l.toString();
+
+        assert multiple_values_toString.equals("[h, e, l, l, o]") : multiple_values_toString;
+
+        // reset l; the list
+        while (!l.isEmpty())
+        {
+            l.removeLast();
+        }
+
+        // case test
+        // here the test focuses on regular usage of the type,
+        // rather than surface level method testing like above
+        System.out.println("Input:");
+        Scanner in = new Scanner(System.in);
+        String input = in.nextLine();
+
+        System.out.println("\nFIFO");
+        System.out.println(l);
+        for (char c : input.toCharArray())
+        {
+            l.addLast(c);
+            System.out.println(l);
+        }
+
+        while (!l.isEmpty())
+        {
+            char c = l.removeFirst();
+            System.out.println(l);
+        }
+
+        System.out.println("\nFILO");
+        System.out.println(l);
+        for (char c : input.toCharArray())
+        {
+            l.addLast(c);
+            System.out.println(l);
+        }
+
+        while (!l.isEmpty())
+        {
+            char c = l.removeLast();
+            System.out.println(l);
+        }
+
+        // these become just like regular linked lists
+        System.out.println("\n`addFirst` -> `removeFirst`");
+        System.out.println(l);
+        for (char c : input.toCharArray())
+        {
+            l.addFirst(c);
+            System.out.println(l);
+        }
+
+        while (!l.isEmpty())
+        {
+            char c = l.removeFirst();
+            System.out.println(l);
+        }
+
+        System.out.println("\n`addLast` -> `removeLast`");
+        System.out.println(l);
+        for (char c : input.toCharArray())
+        {
+            l.addLast(c);
+            System.out.println(l);
+        }
+
+        while (!l.isEmpty())
+        {
+            char c = l.removeLast();
+            System.out.println(l);
+        }
     }
 }

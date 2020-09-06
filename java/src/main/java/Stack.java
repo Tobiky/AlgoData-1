@@ -1,17 +1,19 @@
-import java.util.Iterator;
-import java.util.Scanner;
-
 /*
     Author: Andreas Hammarstrand
     Written: 2020/08/26
-    Updated: 2020/08/28
+    Updated: 2020/09/06
     Purpose:
-        Stack<T> is an array-based implementation of a stack ADT.
+        Stack<T> is an array-based implementation of a stack.
     Usage:
-        Stack<T> is instantiated without any specified starting capacity or
-        starting items. Items are added to the stack through `push(T item)`
-        and removed from the stack through `pop(item)`.
+        Stack<T> is instantiated without any specified starting capacity through
+        `new Stack<T>()` where `T` is the wanted type. Items are added to the
+        stack through `push(T item)` and removed from the stack through
+        `pop(item)`.
  */
+
+import java.util.Iterator;
+import java.util.Scanner;
+
 public class Stack<T> implements Iterable<T>
 {
     public Stack()

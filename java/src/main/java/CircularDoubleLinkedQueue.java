@@ -1,4 +1,19 @@
+/*
+    Author: Andreas Hammarstrand
+    Written: 2020/09/01
+    Updated: 2020/09/06
+    Purpose:
+        CircularDoubleLinkedQueue<T> is a generic queue implementation, based on double linked
+        nodes and is linked circularly.
+    Usage:
+        Create an instance with `new CircularDoubleLinkedQueue<T>()` where `T`
+        is wanted type. Use `void enqueue(T item)` to add items to the list
+        and `T dequeue()` to remove (and retrieve those removed) items from
+        the list.
+ */
+
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class CircularDoubleLinkedQueue<T> implements Iterable<T>
 {
@@ -22,10 +37,17 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
     {
         return first;
     }
+    protected void setFirst(Node node) { first = node;}
 
     protected Node last()
     {
         return last;
+    }
+    protected void setLast(Node node) { last = node; }
+
+    protected void setSize(int size)
+    {
+        this.size = size;
     }
 
     public CircularDoubleLinkedQueue()
@@ -126,13 +148,13 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
         // [.., x, y, z, ] -> [.., x, y, z]
         while (current != last){
             sb
-                    .append(current.value.toString())
+                    .append(current.toString())
                     .append(", ");
             current = current.next;
         }
 
         // append last element
-        sb.append(last.value.toString());
+        sb.append(last.toString());
 
         sb.append(']');
         return sb.toString();
@@ -196,7 +218,7 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
         assert initial_size_result == 0 : initial_size_result;
         assert initial_toString.equals("[]") : initial_toString;
 
-        // after 1 push to the stack the `size` should be 1 and `isEmpty`
+        // after 1 enqueue to the queue the `size` should be 1 and `isEmpty`
         // should be false
         q.enqueue('a');
 
@@ -244,6 +266,30 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
         // case test
         // here the test focuses on regular usage of the type,
         // rather than surface level method testing like above
+        System.out.println("Input:");
+        Scanner in = new Scanner(System.in);
+        String input = in.nextLine();
 
+        System.out.println(q);
+        for (char c : input.toCharArray())
+        {
+            q.enqueue(c);
+            System.out.println(q);
+        }
+
+        // testing that for each works
+        for (char c : q)
+        {
+            // processing the outputted character does not matter and so is left
+            // out of implementation
+        }
+
+        while (!q.isEmpty())
+        {
+            char c = q.dequeue();
+            System.out.println(q);
+        }
+
+        System.out.println(q);
     }
 }
