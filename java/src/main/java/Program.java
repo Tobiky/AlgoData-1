@@ -1,9 +1,15 @@
 /*
     Author: Andreas Hammarstrand
-    Written:
-    Updated:
+    Written: 2020/08/31
+    Updated: 2020/09/06
     Purpose:
+        This file attempts to replicate the behavior of the `main.c` file,
+        from the neighbouring directories, but implemented in Java and
+        using formal objects, e.i. a stack.
     Usage:
+        The main function of this Java file executes both the recursive and
+        iterative functions. The accepted inputs are any Unicode 6.0.0
+        characters for 16 bits.
  */
 
 import java.io.IOException;

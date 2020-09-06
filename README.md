@@ -6,7 +6,7 @@
 - [x] Assignment 3
 - [x] Assignment 4
 - [x] Assignment 5
-- [ ] Assignment 6  
+- [x] Assignment 6  
 
 ## Tests for assignements, respectively
 - [x] 1
@@ -14,4 +14,4 @@
 - [x] 3
 - [x] 4
 - [x] 5
-- [ ] 6  
+- [x] 6  

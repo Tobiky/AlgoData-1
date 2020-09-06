@@ -9,7 +9,7 @@
         Create an instance with `new CircularDoubleLinkedQueue<T>()` where `T`
         is wanted type. Use `void enqueue(T item)` to add items to the list
         and `T dequeue()` to remove (and retrieve those removed) items from
-        the list.
+        the list. To run tests, run static main function of the class.
  */
 
 import java.util.Iterator;
@@ -33,18 +33,29 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
     private Node first, last;
     private int size;
 
+    // returns the first node of the queue
     protected Node first()
     {
         return first;
     }
+    // sets the first node of the queue
     protected void setFirst(Node node) { first = node;}
 
+    // returns the last node of the queue
     protected Node last()
     {
         return last;
     }
+    // sets the last node of the queue
     protected void setLast(Node node) { last = node; }
 
+    // returns amount of elements in the queue.
+    public int size()
+    {
+        return size;
+    }
+    // sets the amount of elements.
+    // only use in chain with adding or removing values from the queue.
     protected void setSize(int size)
     {
         this.size = size;
@@ -115,12 +126,6 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
         return value;
     }
 
-    // returns amount of elements in the queue.
-    public int size()
-    {
-        return size;
-    }
-
     // returns true if the queue is empty, otherwise false.
     public boolean isEmpty()
     {
@@ -166,6 +171,7 @@ public class CircularDoubleLinkedQueue<T> implements Iterable<T>
         return new FIFOQueueIterator(first, last);
     }
 
+    // an iterator for CircularDoubleLinkedQueue<T>
     private class FIFOQueueIterator implements Iterator<T>
     {
         Node current, last;

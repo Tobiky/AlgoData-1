@@ -8,8 +8,8 @@
         to remove values at certain indices.
     Usage:
         See CircularDoubleLinkedQueue<T> for base functionality.
-        `removeAt(int index)` allows the user to remove a value
-        at the specified index.
+        `removeAt(int index)` allows the user to remove a value at the
+        specified index. To run tests, run static main function of the class.
  */
 
 public class GeneralizedQueue<T> extends CircularDoubleLinkedQueue<T>

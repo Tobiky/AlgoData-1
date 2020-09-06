@@ -9,7 +9,8 @@
         Create an instance with `new CircularLinkedList<T>()` where `T`
         is wanted type. To add values, use either `void addLast(T item)`
         or `void addFirst(T item)`, to remove values use either
-        `T removeLast()` or `T removeFirst()`.
+        `T removeLast()` or `T removeFirst()`. To run tests, run static
+        main function of the class.
  */
 
 import java.util.Iterator;
@@ -37,16 +38,19 @@ public class CircularLinkedList<T> implements Iterable<T>
         size = 0;
     }
 
+    // returns the amount of elements in the list.
     public int size()
     {
         return size;
     }
 
+    // returns true if the list is empty, otherwise false.
     public boolean isEmpty()
     {
         return size == 0;
     }
 
+    // returns an iterator over the list.
     public Iterator<T> iterator()
     {
         return new CircularLinkedListIterator(first, last);
@@ -107,11 +111,13 @@ public class CircularLinkedList<T> implements Iterable<T>
         return n;
     }
 
+    // adds the item to the front of the list
     public void addFirst(T item)
     {
         first = addNode(item);
     }
 
+    // adds the item to the end of the list
     public void addLast(T item)
     {
         last = addNode(item);
@@ -210,6 +216,7 @@ public class CircularLinkedList<T> implements Iterable<T>
         return  sb.toString();
     }
 
+    // test method
     public static void main(String[] args)
     {
         CircularLinkedList<Character> l = new CircularLinkedList<Character>();

@@ -8,7 +8,7 @@
         Stack<T> is instantiated without any specified starting capacity through
         `new Stack<T>()` where `T` is the wanted type. Items are added to the
         stack through `push(T item)` and removed from the stack through
-        `pop(item)`.
+        `pop(item)`. To run tests, run static main function of the class.
  */
 
 import java.util.Iterator;
