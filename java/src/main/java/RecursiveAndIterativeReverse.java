@@ -15,7 +15,8 @@
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Program {
+public class RecursiveAndIterativeReverse
+{
     private static void recursive() throws IOException
     {
         // input from user
